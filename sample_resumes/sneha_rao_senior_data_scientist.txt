@@ -1,0 +1,32 @@
+SNEHA RAO
+Senior Data Scientist | NLP | Predictive Analytics | Python & PyTorch
+Bengaluru, India | +91-9123456780 | sneha.rao.ds@gmail.com | LinkedIn: linkedin.com/in/sneha-rao-ds
+
+SUMMARY
+Senior Data Scientist with 6+ years of experience developing machine learning models and NLP applications. Proficient in Python, SQL, PyTorch, Scikit-learn, and cloud data platforms. Experienced in customer analytics, recommendation systems, and deploying models via FastAPI and Docker.
+
+CORE SKILLS
+• Machine Learning: Regression, Classification, Clustering, Random Forest, XGBoost, LightGBM
+• NLP: SpaCy, NLTK, HuggingFace Transformers, BERT, Text Classification, Topic Modeling
+• Languages & Tools: Python, SQL, R, Pandas, NumPy, Scikit-Learn, PyTorch, Docker, Git, MLflow
+• Cloud & Data: AWS (S3, EC2, SageMaker), Snowflake, PostgreSQL, Tableau
+
+EXPERIENCE
+
+Razorpay, Bengaluru (Feb 2022 - Present)
+Senior Data Scientist
+• Developed merchant risk scoring models analyzing creditworthiness and chargeback risks using gradient boosted trees and survival analysis, reducing default rates by 18%.
+• Built customer support ticket classification model using fine-tuned DistilBERT, routing 100K+ tickets/month with 91% accuracy and cutting initial response time by 40%.
+• Partnered with engineering to containerize models with Docker and deploy them on AWS SageMaker with automated monitoring.
+
+Dunzo, Bengaluru (Jul 2019 - Jan 2022)
+Data Scientist
+• Optimized dynamic delivery pricing algorithms taking into account weather, traffic, and supply constraints, boosting courier utilization by 12%.
+• Built user churn prediction model using Random Forest and SHAP for model explainability; enabled marketing team to retain 8,000+ monthly active users through targeted promotions.
+
+Affine Analytics, Bengaluru (Jun 2018 - Jun 2019)
+Associate Data Scientist
+• Performed exploratory data analysis, feature engineering, and statistical modeling for e-commerce and retail clients.
+
+EDUCATION
+2014 - 2018: B.Tech in Information Technology, NIT Karnataka (Surathkal)

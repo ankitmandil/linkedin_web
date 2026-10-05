@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI LinkedIn Roles & Hiring Manager Discovery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+    <!-- Navbar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-blue-600 to-indigo-600 text-white p-2.5 rounded-xl shadow-md">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold text-slate-800 leading-tight">CareerLead AI</h1>
+                    <p class="text-xs text-slate-500">Universal Resume Matcher, LinkedIn Crawler & Hiring Manager Discovery</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <!-- Mobile / Remote Access Button -->
+                <button onclick="openNetworkModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition shadow-sm">
+                    <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Mobile / Remote Access
+                </button>
+
+                <span id="liveStatusBadge" class="hidden sm:inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    <span class="w-2 h-2 mr-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                    Live LinkedIn Crawler Active
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Network Info Notice Bar -->
+    <div id="networkBanner" class="bg-gradient-to-r from-blue-50 via-indigo-50 to-slate-50 border-b border-blue-100 py-2.5 px-4 text-xs text-slate-700">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">LIVE NETWORK</span>
+                <span>Access from mobile phone or other PC: <strong id="lanUrlText" class="text-blue-700 font-mono">http://192.168.68.102:8000</strong></span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="copyLanUrl()" class="text-blue-600 hover:text-blue-800 font-semibold underline flex items-center gap-1">
+                    <i data-lucide="copy" class="w-3 h-3"></i> Copy Wi-Fi Link
+                </button>
+                <span class="text-slate-300">|</span>
+                <button onclick="openNetworkModal()" class="text-indigo-600 hover:text-indigo-800 font-bold underline flex items-center gap-1">
+                    <i data-lucide="globe" class="w-3 h-3"></i> Public URL (Worldwide)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Column: Resume Input, Presets & Controls -->
+            <div class="lg:col-span-4 space-y-6">
+                
+                <!-- Resume Box -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i> Candidate Resume
+                        </h2>
+                        <div class="flex items-center gap-2">
+                            <label class="cursor-pointer text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                                <i data-lucide="upload" class="w-3.5 h-3.5"></i> Upload
+                                <input type="file" id="resumeFileInput" accept=".txt,.md,.pdf,.docx" class="hidden" onchange="handleFileUpload(event)">
+                            </label>
+                            <span class="text-slate-300">|</span>
+                            <button onclick="clearResume()" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- Role Preset Dropdown -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Quick Sample Presets</label>
+                        <select id="presetSelect" onchange="applyPreset(this.value)" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-medium text-slate-700">
+                            <option value="product_leader">⭐ Product Leader (Twisha Prasad, 12+ YoE)</option>
+                            <option value="ds_lead">⭐ Data Science & AI Leader (Dr. Aryan Sharma, 11+ YoE)</option>
+                            <option value="ds_senior">⭐ Senior Data Scientist (Sneha Rao, 6+ YoE)</option>
+                            <option value="custom">✍ Custom / Blank Resume</option>
+                        </select>
+                    </div>
+
+                    <div class="relative">
+                        <textarea id="resumeInput" rows="10" oninput="detectTrackPreview()" class="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Paste your resume here (Data Science, Product, Engineering, etc.)..."></textarea>
+                        
+                        <div class="mt-1 flex items-center justify-between text-[11px] text-slate-500">
+                            <span id="detectedTrackBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold border border-blue-200">
+                                Track: Detecting...
+                            </span>
+                            <span id="charCount">0 characters</span>
+                        </div>
+                    </div>
+
+                    <!-- Search Controls -->
+                    <div class="space-y-3 pt-3 border-t border-slate-100">
+                        <!-- Sort Order: Newest First by default! -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1 flex items-center justify-between">
+                                <span>Order Results By</span>
+                                <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Latest First</span>
+                            </label>
+                            <select id="sortSelect" class="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-semibold text-slate-800">
+                                <option value="date" selected>📅 Date Posted (Latest Should Come First)</option>
+                                <option value="match">🎯 Match Score (Highest Score First)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Target Seniority Level</label>
+                            <select id="levelFilter" class="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-medium">
+                                <option value="all">All Senior Roles (Higher & Similar)</option>
+                                <option value="higher" selected>Higher Roles Only (Director / VP / Head)</option>
+                                <option value="similar">Similar Roles Only (Lead / Principal / GPM)</option>
+                            </select>
+                        </div>
+
+                        <!-- Location Dropdown + Custom Field -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Location / City</label>
+                            <select id="locationSelect" onchange="handleLocationChange(this.value)" class="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-medium">
+                                <option value="Bengaluru, Karnataka, India" selected>Bengaluru, Karnataka, India</option>
+                                <option value="Hyderabad, Telangana, India">Hyderabad, Telangana, India</option>
+                                <option value="Mumbai, Maharashtra, India">Mumbai, Maharashtra, India</option>
+                                <option value="Delhi NCR, India">Delhi NCR (Gurgaon / Noida), India</option>
+                                <option value="Pune, Maharashtra, India">Pune, Maharashtra, India</option>
+                                <option value="Chennai, Tamil Nadu, India">Chennai, Tamil Nadu, India</option>
+                                <option value="Kolkata, West Bengal, India">Kolkata, West Bengal, India</option>
+                                <option value="India">India (All Locations / Remote)</option>
+                                <option value="Remote">Remote (Global)</option>
+                                <option value="United States">United States (San Francisco / NY / Remote)</option>
+                                <option value="Singapore">Singapore</option>
+                                <option value="custom">Custom City / Region...</option>
+                            </select>
+                            
+                            <input type="text" id="customLocationInput" placeholder="Enter any city or country (e.g. Amsterdam, Berlin, Austin)" class="hidden mt-2 w-full text-xs p-2 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-semibold text-slate-700">Results Per Page</label>
+                            <select id="pageSizeSelect" class="text-xs p-1.5 border border-slate-300 rounded-lg bg-white font-medium">
+                                <option value="6" selected>6 per page</option>
+                                <option value="10">10 per page</option>
+                                <option value="15">15 per page</option>
+                            </select>
+                        </div>
+
+                        <button id="searchBtn" onclick="runSearch(1)" class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                            <i data-lucide="search" class="w-4 h-4"></i> Discover Roles & Hiring Managers
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Export Bar -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex gap-3">
+                    <button onclick="exportData('csv')" class="flex-1 py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
+                    </button>
+                    <button onclick="exportData('json')" class="flex-1 py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="code" class="w-3.5 h-3.5"></i> Export JSON
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column: Results & Intelligence Dashboard -->
+            <div class="lg:col-span-8 space-y-6">
+                
+                <!-- Loading State -->
+                <div id="loadingBox" class="hidden bg-white border border-slate-200 rounded-2xl p-10 text-center space-y-4 shadow-sm">
+                    <div class="inline-block animate-spin text-blue-600">
+                        <i data-lucide="loader-2" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800" id="loadingStatus">Scanning live LinkedIn jobs & ordering by date...</h3>
+                    <p class="text-xs text-slate-500 max-w-md mx-auto">Retrieving latest postings, evaluating semantic TF-IDF overlap, checking YoE delta, and finding verified executive hiring leaders.</p>
+                </div>
+
+                <!-- Candidate Analysis Card -->
+                <div id="candidateCard" class="hidden bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white rounded-2xl p-6 shadow-lg border border-slate-800">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <div class="flex items-center gap-3">
+                                <h2 id="candName" class="text-xl font-extrabold tracking-tight">Candidate Name</h2>
+                                <span id="candYoE" class="bg-blue-600/40 text-blue-200 text-xs font-semibold px-3 py-1 rounded-full border border-blue-400/30">12+ Years Experience</span>
+                                <span id="candTrackTag" class="bg-indigo-600/40 text-indigo-200 text-xs font-semibold px-2.5 py-1 rounded-full border border-indigo-400/30">DATA SCIENCE</span>
+                            </div>
+                            <p id="candRole" class="text-sm text-slate-300 mt-1.5 font-medium">Current Seniority & Organization</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/5">
+                            <span class="text-blue-300 font-bold uppercase tracking-wider block mb-1">Target Higher Roles:</span>
+                            <p id="candHigherRoles" class="text-slate-200 font-medium">Director of Data Science, Head of AI, VP Data Science</p>
+                        </div>
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/5">
+                            <span class="text-indigo-300 font-bold uppercase tracking-wider block mb-1">Target Similar Roles:</span>
+                            <p id="candSimilarRoles" class="text-slate-200 font-medium">Lead Data Scientist, Principal Data Scientist</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 flex flex-wrap gap-1.5" id="candSkillsTags">
+                        <!-- Skills pills dynamically added -->
+                    </div>
+                </div>
+
+                <!-- Results Header & Pagination Bar -->
+                <div id="resultsHeader" class="hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-sm font-bold text-slate-800">Discovered Opportunities & Decision-Makers</h3>
+                            <span id="sortIndicatorBadge" class="text-[10px] font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">📅 Sorted: Latest First</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-0.5" id="resultsCount">Showing Page 1</p>
+                    </div>
+
+                    <!-- Pagination Controls -->
+                    <div class="flex items-center gap-2">
+                        <button id="prevPageBtn" onclick="changePage(-1)" disabled class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 flex items-center gap-1 transition">
+                            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Prev
+                        </button>
+                        <span id="pageIndicator" class="text-xs font-bold text-slate-700 px-2">Page 1</span>
+                        <button id="nextPageBtn" onclick="changePage(1)" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 shadow-sm transition">
+                            Next <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Opportunities Container -->
+                <div id="opportunitiesContainer" class="space-y-4">
+                    <!-- Cards will be injected dynamically -->
+                </div>
+
+                <!-- Bottom Pagination Bar -->
+                <div id="bottomPagination" class="hidden flex items-center justify-center gap-3 pt-4">
+                    <button id="prevPageBtnBottom" onclick="changePage(-1)" class="px-4 py-2 text-xs font-semibold rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 shadow-sm flex items-center gap-1">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous Page
+                    </button>
+                    <span id="pageIndicatorBottom" class="text-xs font-bold text-slate-700 px-3">Page 1</span>
+                    <button id="nextPageBtnBottom" onclick="changePage(1)" class="px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-sm flex items-center gap-1">
+                        Next Page <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile & Public Access Modal -->
+    <div id="networkModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
+            <div class="flex items-center justify-between border-b pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="bg-blue-100 text-blue-700 p-2 rounded-lg">
+                        <i data-lucide="smartphone" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800">Access from Mobile & Other PCs</h3>
+                        <p class="text-xs text-slate-500">Connect to this AI Dashboard from any device</p>
+                    </div>
+                </div>
+                <button onclick="closeNetworkModal()" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Option 1: Local Wi-Fi Network -->
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                        <i data-lucide="wifi" class="w-4 h-4 text-emerald-600"></i> Same Wi-Fi Network (Mobile/Laptop)
+                    </span>
+                    <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">Active</span>
+                </div>
+                <p class="text-xs text-slate-500">Open Chrome or Safari on your phone connected to the same Wi-Fi and visit:</p>
+                <div class="flex items-center gap-2">
+                    <input type="text" id="modalLanInput" readonly value="http://192.168.68.102:8000" class="w-full text-xs font-mono p-2.5 bg-white border border-slate-300 rounded-lg">
+                    <button onclick="copyToClipboard('modalLanInput', this)" class="px-3 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg flex items-center gap-1">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+                    </button>
+                </div>
+            </div>
+
+            <!-- Option 2: Worldwide Public HTTPS Tunnel -->
+            <div class="bg-indigo-50/70 rounded-xl p-4 border border-indigo-200 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                        <i data-lucide="globe" class="w-4 h-4 text-indigo-600"></i> Public HTTPS URL (Cellular / Anywhere)
+                    </span>
+                    <span id="publicTunnelStatus" class="text-[10px] bg-slate-200 text-slate-700 font-bold px-2 py-0.5 rounded">Ready to activate</span>
+                </div>
+                <p class="text-xs text-slate-500">Access from mobile on 4G/5G or any external PC worldwide without being on the same Wi-Fi.</p>
+                
+                <div id="publicUrlBox" class="hidden space-y-2">
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="modalPublicInput" readonly value="" class="w-full text-xs font-mono p-2.5 bg-white border border-slate-300 rounded-lg text-indigo-700 font-bold">
+                        <button onclick="copyToClipboard('modalPublicInput', this)" class="px-3 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg flex items-center gap-1">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
+                        <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Live Public Tunnel Online
+                    </p>
+                </div>
+
+                <button id="activateTunnelBtn" onclick="activatePublicTunnel()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition flex items-center justify-center gap-2 shadow-sm">
+                    <i data-lucide="share-2" class="w-4 h-4"></i> Generate Live Public HTTPS Link
+                </button>
+            </div>
+
+            <div class="flex justify-end pt-2 border-t">
+                <button onclick="closeNetworkModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Outreach Pitch Modal -->
+    <div id="outreachModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4 text-blue-600"></i> AI Generated Executive Outreach Copy
+                </h3>
+                <button onclick="closeOutreachModal()" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                            <i data-lucide="message-square" class="w-3.5 h-3.5 text-blue-600"></i> LinkedIn Connection Note (<300 Chars)
+                        </label>
+                        <button onclick="copyToClipboard('modalConnNote', this)" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Note
+                        </button>
+                    </div>
+                    <textarea id="modalConnNote" rows="3" readonly class="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none"></textarea>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                            <i data-lucide="mail" class="w-3.5 h-3.5 text-blue-600"></i> Full InMail / Email Pitch
+                        </label>
+                        <button onclick="copyToClipboard('modalInmail', this)" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy InMail
+                        </button>
+                    </div>
+                    <textarea id="modalInmail" rows="9" readonly class="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none"></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-3 border-t">
+                <button onclick="closeOutreachModal()" class="px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let searchResults = null;
+        let currentPage = 1;
+        let presetsData = {};
+        let lanUrl = "http://192.168.68.102:8000";
+
+        async function initPresets() {
+            try {
+                const res = await fetch('/api/presets');
+                presetsData = await res.json();
+                applyPreset('product_leader');
+            } catch (e) {
+                console.error("Presets error:", e);
+            }
+
+            // Fetch network info
+            try {
+                const netRes = await fetch('/api/network-info');
+                const netData = await netRes.json();
+                if (netData.lan_url) {
+                    lanUrl = netData.lan_url;
+                    document.getElementById('lanUrlText').innerText = lanUrl;
+                    document.getElementById('modalLanInput').value = lanUrl;
+                }
+                if (netData.public_url) {
+                    showActivePublicUrl(netData.public_url);
+                }
+            } catch (e) {}
+        }
+
+        function applyPreset(key) {
+            if (presetsData[key]) {
+                document.getElementById('resumeInput').value = presetsData[key].content;
+            } else if (key === 'custom') {
+                document.getElementById('resumeInput').value = '';
+            }
+            detectTrackPreview();
+        }
+
+        function clearResume() {
+            document.getElementById('resumeInput').value = '';
+            document.getElementById('presetSelect').value = 'custom';
+            detectTrackPreview();
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('resumeInput').value = e.target.result;
+                document.getElementById('presetSelect').value = 'custom';
+                detectTrackPreview();
+            };
+            reader.readAsText(file);
+        }
+
+        function handleLocationChange(val) {
+            const customInput = document.getElementById('customLocationInput');
+            if (val === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+            }
+        }
+
+        function getActiveLocation() {
+            const selectVal = document.getElementById('locationSelect').value;
+            if (selectVal === 'custom') {
+                return document.getElementById('customLocationInput').value.trim() || 'Bengaluru, Karnataka, India';
+            }
+            return selectVal;
+        }
+
+        function detectTrackPreview() {
+            const text = document.getElementById('resumeInput').value.toLowerCase();
+            document.getElementById('charCount').innerText = `${document.getElementById('resumeInput').value.length} characters`;
+
+            let badge = document.getElementById('detectedTrackBadge');
+            if (!text.trim()) {
+                badge.innerText = "Track: Awaiting input";
+                badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-semibold border border-slate-200";
+                return;
+            }
+
+            const dsTerms = ["data science", "machine learning", "deep learning", "nlp", "llm", "pytorch", "transformers"];
+            const pmTerms = ["product manager", "product lead", "gpm", "product strategy", "checkout", "conversion"];
+
+            let dsCount = dsTerms.filter(t => text.includes(t)).length;
+            let pmCount = pmTerms.filter(t => text.includes(t)).length;
+
+            if (dsCount > pmCount) {
+                badge.innerText = "Track: Data Science & AI 🤖";
+                badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200";
+            } else {
+                badge.innerText = "Track: Product Leadership 🚀";
+                badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold border border-blue-200";
+            }
+        }
+
+        async function runSearch(page = 1) {
+            const resume = document.getElementById('resumeInput').value.trim();
+            const level = document.getElementById('levelFilter').value;
+            const location = getActiveLocation();
+            const pageSize = parseInt(document.getElementById('pageSizeSelect').value);
+            const sortBy = document.getElementById('sortSelect').value;
+
+            if (!resume) {
+                alert("Please paste or upload a resume first!");
+                return;
+            }
+
+            currentPage = page;
+            document.getElementById('loadingBox').classList.remove('hidden');
+            document.getElementById('candidateCard').classList.add('hidden');
+            document.getElementById('resultsHeader').classList.add('hidden');
+            document.getElementById('bottomPagination').classList.add('hidden');
+            document.getElementById('opportunitiesContainer').innerHTML = '';
+            document.getElementById('searchBtn').disabled = true;
+
+            try {
+                const response = await fetch('/api/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        resume_text: resume,
+                        level_filter: level,
+                        location: location,
+                        page: page,
+                        page_size: pageSize,
+                        sort_by: sortBy
+                    })
+                });
+
+                const data = await response.json();
+                searchResults = data;
+                renderResults(data);
+            } catch (err) {
+                alert("Search error: " + err);
+            } finally {
+                document.getElementById('loadingBox').classList.add('hidden');
+                document.getElementById('searchBtn').disabled = false;
+            }
+        }
+
+        function changePage(delta) {
+            const next = currentPage + delta;
+            if (next >= 1) {
+                runSearch(next);
+            }
+        }
+
+        function renderResults(data) {
+            const cand = data.candidate;
+            const opps = data.opportunities;
+            const meta = data.search_metadata;
+
+            // Render Candidate Card
+            document.getElementById('candName').innerText = cand.name;
+            document.getElementById('candYoE').innerText = cand.years_of_experience + "+ Years Experience";
+            document.getElementById('candTrackTag').innerText = cand.track.replace('_', ' ');
+            document.getElementById('candRole').innerText = `${cand.current_title} @ ${cand.current_company}`;
+            document.getElementById('candHigherRoles').innerText = cand.target_higher_roles.slice(0, 3).join(", ");
+            document.getElementById('candSimilarRoles').innerText = cand.target_similar_roles.slice(0, 2).join(", ");
+            
+            const skillsContainer = document.getElementById('candSkillsTags');
+            skillsContainer.innerHTML = '';
+            cand.skills.forEach(s => {
+                const span = document.createElement('span');
+                span.className = "bg-white/10 text-slate-200 px-2 py-0.5 rounded text-[11px] border border-white/10";
+                span.innerText = s;
+                skillsContainer.appendChild(span);
+            });
+            document.getElementById('candidateCard').classList.remove('hidden');
+
+            // Render Sort Status & Pagination
+            document.getElementById('resultsHeader').classList.remove('hidden');
+            document.getElementById('bottomPagination').classList.remove('hidden');
+            
+            const isDateSort = (meta.sort_by === 'date');
+            document.getElementById('sortIndicatorBadge').innerText = isDateSort ? '📅 Sorted: Latest First' : '🎯 Sorted: Highest Match First';
+            document.getElementById('resultsCount').innerText = `Showing ${opps.length} opportunities for ${cand.track.replace('_', ' ')} (Page ${meta.page})`;
+            document.getElementById('pageIndicator').innerText = `Page ${meta.page}`;
+            document.getElementById('pageIndicatorBottom').innerText = `Page ${meta.page}`;
+            document.getElementById('prevPageBtn').disabled = meta.page <= 1;
+            document.getElementById('prevPageBtnBottom').disabled = meta.page <= 1;
+
+            // Render Opportunity Cards
+            const container = document.getElementById('opportunitiesContainer');
+            container.innerHTML = '';
+
+            if (opps.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl p-8 text-center border border-slate-200">
+                        <p class="text-sm font-semibold text-slate-700">No more opportunities found on page ${meta.page}.</p>
+                        <p class="text-xs text-slate-500 mt-1">Try switching to 'All Senior Roles' or broadening the location.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            opps.forEach((opp, i) => {
+                const isHigher = opp.role_level_category === 'Higher Role';
+                const badgeColor = isHigher ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-amber-100 text-amber-800 border-amber-300';
+                const badgeIcon = isHigher ? 'trending-up' : 'repeat';
+                const badgeText = isHigher ? 'Higher Role 🚀' : 'Similar Role ⚡';
+
+                let scoreBg = "bg-emerald-50 text-emerald-700 border-emerald-300";
+                if (opp.match_score < 70) scoreBg = "bg-amber-50 text-amber-700 border-amber-300";
+                if (opp.match_score < 60) scoreBg = "bg-slate-100 text-slate-700 border-slate-300";
+
+                const hm = opp.hiring_manager;
+
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4 transition hover:shadow-md";
+
+                const matchedPills = (opp.matched_skills || []).map(s => 
+                    `<span class="bg-emerald-50 text-emerald-800 text-[10px] font-semibold px-2 py-0.5 rounded border border-emerald-200">${s}</span>`
+                ).join(" ");
+
+                const missingPills = (opp.missing_skills || []).map(s => 
+                    `<span class="bg-slate-100 text-slate-600 text-[10px] font-medium px-2 py-0.5 rounded border border-slate-200">${s}</span>`
+                ).join(" ");
+
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badgeColor} inline-flex items-center gap-1">
+                                    <i data-lucide="${badgeIcon}" class="w-3 h-3"></i> ${badgeText}
+                                </span>
+                                <span class="text-xs font-bold px-2.5 py-0.5 rounded-md border ${scoreBg} inline-flex items-center gap-1">
+                                    <i data-lucide="target" class="w-3 h-3"></i> ${opp.match_score}% JD Match
+                                </span>
+                                <!-- Date Badge -->
+                                <span class="text-[11px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 inline-flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3 h-3 text-blue-600"></i> ${opp.posted_time || 'Recent'} ${opp.posted_date_iso ? '(' + opp.posted_date_iso + ')' : ''}
+                                </span>
+                            </div>
+                            <h4 class="text-base font-extrabold text-slate-900 mt-2">${opp.job_title}</h4>
+                            <p class="text-xs font-semibold text-slate-500">${opp.company} • ${opp.location}</p>
+                        </div>
+                        <a href="${opp.job_url}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-xl transition whitespace-nowrap">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Open Job Post
+                        </a>
+                    </div>
+
+                    <!-- Hiring Manager / Executive Leader Box -->
+                    <div class="bg-slate-50/80 border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shadow-sm flex-shrink-0">
+                                ${hm.name ? hm.name.charAt(0) : 'E'}
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Hiring Leader</span>
+                                    <span class="text-[10px] bg-emerald-50 text-emerald-700 px-1.5 py-0.2 rounded border border-emerald-200 font-semibold">${hm.confidence}</span>
+                                </div>
+                                <h5 class="text-sm font-bold text-slate-800 leading-tight">${hm.name}</h5>
+                                <p class="text-xs text-slate-500 line-clamp-1">${hm.title || hm.headline}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <a href="${hm.linkedin_url}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-3.5 py-2 rounded-xl shadow-sm transition whitespace-nowrap">
+                                <i data-lucide="linkedin" class="w-3.5 h-3.5"></i> View LinkedIn
+                            </a>
+                            <button onclick="openOutreachModal(${i})" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 px-3.5 py-2 rounded-xl transition whitespace-nowrap">
+                                <i data-lucide="send" class="w-3.5 h-3.5 text-blue-600"></i> Outreach Copy
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Granular JD vs Resume Breakdown -->
+                    <div class="text-xs bg-slate-50/50 rounded-xl p-3.5 border border-slate-100 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-700">Resume vs JD Match Breakdown:</span>
+                            <span class="text-[11px] font-semibold text-slate-500">JD Required: ${opp.jd_yoe_requirement}</span>
+                        </div>
+                        
+                        <div class="whitespace-pre-line text-slate-600 leading-relaxed font-medium">
+                            ${opp.match_rationale}
+                        </div>
+
+                        ${matchedPills ? `
+                            <div class="pt-2 border-t border-slate-100">
+                                <span class="text-[11px] font-bold text-slate-600 block mb-1">Matching Skills Verified:</span>
+                                <div class="flex flex-wrap gap-1">${matchedPills}</div>
+                            </div>
+                        ` : ''}
+
+                        ${missingPills ? `
+                            <div class="pt-1">
+                                <span class="text-[11px] font-bold text-slate-500 block mb-1">Additional Desired in JD:</span>
+                                <div class="flex flex-wrap gap-1">${missingPills}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        function openOutreachModal(index) {
+            if (!searchResults || !searchResults.opportunities[index]) return;
+            const opp = searchResults.opportunities[index];
+            document.getElementById('modalConnNote').value = opp.outreach.connection_note;
+            document.getElementById('modalInmail').value = opp.outreach.inmail_pitch;
+            document.getElementById('outreachModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeOutreachModal() {
+            document.getElementById('outreachModal').classList.add('hidden');
+        }
+
+        function openNetworkModal() {
+            document.getElementById('networkModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeNetworkModal() {
+            document.getElementById('networkModal').classList.add('hidden');
+        }
+
+        function copyLanUrl() {
+            navigator.clipboard.writeText(lanUrl).then(() => {
+                alert(`Copied local network URL: ${lanUrl}\nOpen this link on any mobile phone or PC on the same Wi-Fi!`);
+            });
+        }
+
+        async function activatePublicTunnel() {
+            const btn = document.getElementById('activateTunnelBtn');
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Creating Secure Public HTTPS Link...`;
+            lucide.createIcons();
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/start-tunnel', { method: 'POST' });
+                const data = await res.json();
+                if (data.public_url) {
+                    showActivePublicUrl(data.public_url);
+                } else {
+                    alert("Could not start public tunnel automatically. Please ensure SSH client is enabled or use the local Wi-Fi URL: " + lanUrl);
+                    btn.innerHTML = `<i data-lucide="share-2" class="w-4 h-4"></i> Retry Public Tunnel`;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                alert("Error starting tunnel: " + err);
+                btn.innerHTML = `<i data-lucide="share-2" class="w-4 h-4"></i> Retry Public Tunnel`;
+                btn.disabled = false;
+            }
+        }
+
+        function showActivePublicUrl(url) {
+            document.getElementById('publicUrlBox').classList.remove('hidden');
+            document.getElementById('modalPublicInput').value = url;
+            document.getElementById('publicTunnelStatus').innerText = "Online";
+            document.getElementById('publicTunnelStatus').className = "text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded";
+            document.getElementById('activateTunnelBtn').classList.add('hidden');
+            lucide.createIcons();
+        }
+
+        function copyToClipboard(elementId, btn) {
+            const text = document.getElementById(elementId).value;
+            navigator.clipboard.writeText(text).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-green-600"></i> Copied!`;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        function exportData(format) {
+            if (!searchResults || !searchResults.opportunities) {
+                alert("Please run a search first!");
+                return;
+            }
+
+            if (format === 'json') {
+                const blob = new Blob([JSON.stringify(searchResults, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `careerlead_${searchResults.candidate.track.toLowerCase()}_page${currentPage}_${Date.now()}.json`;
+                a.click();
+            } else if (format === 'csv') {
+                const rows = [
+                    ["Job Title", "Company", "Location", "Posted Date", "Role Level", "Match Score", "Job URL", "Hiring Manager", "Designation", "LinkedIn URL"]
+                ];
+                searchResults.opportunities.forEach(o => {
+                    rows.push([
+                        `"${o.job_title}"`,
+                        `"${o.company}"`,
+                        `"${o.location}"`,
+                        `"${o.posted_time} (${o.posted_date_iso})"`,
+                        `"${o.role_level_category}"`,
+                        `"${o.match_score}%"`,
+                        `"${o.job_url}"`,
+                        `"${o.hiring_manager.name}"`,
+                        `"${o.hiring_manager.title}"`,
+                        `"${o.hiring_manager.linkedin_url}"`
+                    ]);
+                });
+                const csvContent = rows.map(e => e.join(",")).join("\n");
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `careerlead_${searchResults.candidate.track.toLowerCase()}_page${currentPage}_${Date.now()}.csv`;
+                a.click();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initPresets();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

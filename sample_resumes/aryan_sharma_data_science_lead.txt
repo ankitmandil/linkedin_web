@@ -1,0 +1,42 @@
+DR. ARYAN SHARMA
+Lead Data Scientist & AI Architect | Deep Learning | LLMs | Recommender Systems | MLOps
+Bengaluru, Karnataka, India | +91-9876543210 | aryan.sharma.ai@gmail.com | LinkedIn: linkedin.com/in/aryan-sharma-ai
+
+SUMMARY
+Accomplished Data Science & AI Leader with 11+ years of experience building, scaling, and deploying production-grade Machine Learning, Deep Learning, and Generative AI systems. Proven expertise in Architecting Large Language Model (LLM) fine-tuning pipelines, multimodal recommenders, real-time fraud detection, and enterprise MLOps across high-throughput consumer and fintech platforms. Led cross-functional teams of 8+ Data Scientists, ML Engineers, and Research Scientists. Track record of driving $25M+ in measurable business impact through algorithmic optimization and AI automation.
+
+CORE SKILLS & TECH STACK
+• Machine Learning & Deep Learning: Python, Transformers, PyTorch, TensorFlow, Scikit-learn, XGBoost, LightGBM, Keras, HuggingFace
+• Generative AI & LLMs: LangChain, LlamaIndex, LoRA/QLoRA fine-tuning, RAG systems, Prompt Engineering, vLLM, Vector DBs (Milvus, Pinecone, FAISS)
+• NLP & Computer Vision: BERT, RoBERTa, Sentiment Analysis, Named Entity Recognition (NER), Semantic Search, OCR, ResNet, YOLO
+• Big Data & Distributed Computing: PySpark, Apache Spark, Databricks, Ray, Kafka, Hadoop, BigQuery, Snowflake
+• MLOps & Production: Docker, Kubernetes, Kubeflow, MLflow, Airflow, Triton Inference Server, AWS SageMaker, GCP Vertex AI
+• Mathematics & Experimentation: Statistical Modeling, Causal Inference, Bayesian Optimization, A/B Testing, Multi-Armed Bandits
+
+WORK EXPERIENCE
+
+Swiggy, Bengaluru (Jan 2022 - Present)
+Lead Data Scientist (Machine Learning & Recommender Platforms)
+• Spearheaded the core AI recommendation engine serving 20M+ daily active users, optimizing restaurant ranking and item personalization using two-tower neural networks and deep retrieval architectures; boosted Cart-to-Order conversion by +4.8% and generated ₹120 Cr incremental GMV.
+• Architected an end-to-end GenAI search assistant using open-source LLMs (Llama-3 fine-tuned with LoRA) and dense vector retrieval, enabling natural language conversational food discovery and reducing query abandonment by 28%.
+• Mentored and led a high-performing team of 8 Data Scientists and ML Engineers; established team-wide model governance, reproducible ML pipelines with Kubeflow/MLflow, and automated CI/CD for model deployment on Kubernetes.
+• Reduced model inference latency from 140ms to 28ms using TensorRT and ONNX runtime optimizations, cutting GPU infrastructure costs by 35% ($180K/year).
+
+Flipkart, Bengaluru (Jul 2018 - Dec 2021)
+Senior Data Scientist (Search, Ranking & Fraud Detection)
+• Built real-time transaction fraud detection algorithms using Graph Neural Networks (GNNs) and XGBoost, scanning 500+ transactions per second with 99.4% precision, preventing ~$12M in fraudulent returns and chargebacks.
+• Designed personalized query auto-completion and spell-correction models using Transformer architectures, improving search click-through rate (CTR) by +6.2%.
+• Collaborated with product and engineering leaders on large-scale A/B experimentation frameworks, statistical power calculations, and causal impact analysis.
+
+Myntra, Bengaluru (Jun 2015 - Jun 2018)
+Data Scientist (Computer Vision & Personalization)
+• Developed deep learning visual similarity and visual search models (CNNs, triplet loss) allowing users to shop via uploaded photos, driving 1.2M monthly searches with 14% conversion.
+• Built collaborative filtering and matrix factorization recommendation pipelines handling 50M+ user-item interaction pairs in PySpark.
+
+Mu Sigma, Bengaluru (Aug 2013 - May 2015)
+Decision Scientist / Data Analyst
+• Built predictive churn and customer lifetime value (LTV) models for Fortune 500 retail clients using logistic regression, random forests, and survival analysis.
+
+EDUCATION
+2015 - 2018: Ph.D. in Computer Science (Machine Learning & NLP), Indian Institute of Science (IISc), Bangalore
+2009 - 2013: B.Tech in Computer Science & Engineering, IIT Kharagpur

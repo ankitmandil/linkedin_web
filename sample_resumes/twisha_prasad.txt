@@ -1,0 +1,101 @@
+TWISHA PRASAD
+Consumer Growth & Marketplace|Payments & Offers|Loyalty|Search & Personalisation
+Bengaluru, India | +91-7464037050 | tprasad.mim2015@gmail.com | LinkedIn
+
+Profile
+Product leader with 12+ years across consumer marketplaces, payments, loyalty, search, personalisation and AI. Currently
+leading a 6-PM portfolio at BookMyShow spanning core marketplace growth & foundational platforms. Track record of
+reframing large product problems, building the platform & operating model underneath them, and translating strategy into
+measurable growth, monetisation and retention outcomes. Prior founder and global B2B2C product experience.
+Selected scale: ~35M tickets/month | ~80M MAU | ~₹1,500 Cr incremental GMV | 7M passes | 100+ countries at VMock
+
+Work Experience
+BookMyShow, Bangalore (May’21 - Present)
+Group Product Manager 2 | Lead 6 PMs| Promoted twice from SPM to GPM1 to GPM2 as scope expanded from Movies
+Growth & Marketplace to additionally own Loyalty, Payments & Offers, and subsequently Search & Personalisation (Impact:
+Generated ~₹150 Cr incremental revenue and ~₹1,500 Cr incremental GMV)
+• Movies Growth & Marketplace: Scaled the movies business by expanding the growth charter beyond funnel optimisation to
+both demand and supply including discovery, decision-making, cinema/showtime ranking, inventory discoverability,
+utilisation, new-cinema adoption and trust through Ratings & Reviews. Improved booking conversion from 12% to 17%
+(+5pp), contributing ~₹50 Cr incremental revenue and ~₹900 Cr GMV across a marketplace processing ~35M tickets/month
+• Payments Platform: Owned BookMyShow's end-to-end payments charter and platform strategy, spanning payment-method
+discovery, initiation, processing, failures, retries, intelligent routing; drove reliability through Juspay. Reduced payment
+failure rate from 17% to 14% (-3pp) & improved checkout conversion from 55% to 64% (+9pp) contributing ~₹20 Cr
+incremental revenue and ₹365 Cr GMV
+• Offers & Incentives Platform: Architected reusable incentives infrastructure spanning eligibility, orchestration, multi-offer
+stacking, rule & edge-case handling, cancellations/refunds and reconciliation; extended the platform to partner loyalty
+ecosystems including PVR and Cinepolis, increasing offer application from 32% to 44% (+12pp)
+• Loyalty & Membership: Reframed loyalty from campaign-led discounting into a reusable membership/benefits platform,
+defining acquisition, pricing, eligibility, benefit architecture, redemption, expiry, stacking, renewal and program economics;
+owned BMS Club & FilmyPass P&L & cross-functional alignment across finance, marketing & other stakeholders. Scaled
+BMS Club to 3M passes with ~60% renewal rate & FilmyPass to 4M passes
+• Search: Reframed on-platform search strategy to improve intent fulfilment, reduce discovery drop-off and increase
+query-to-transaction conversion by defining the next-generation roadmap using LLMs, semantic content signals and
+AI-based matching to move search from keyword retrieval toward intent understanding and personalised discovery,
+doubling search-led conversion from 7% to 14% (+7pp)
+• Discovery & Personalisation: Led personalisation across homepage, navigation, category, movie and event discovery
+surfaces, integrating behavioural, transactional, contextual and stated-interest signals into ranking and recommendation
+experiences increasing blended conversion from 6% to 8% (+2pp)
+• Data, Experimentation, AI & People Leadership: Governed the internal data/experimentation function and led the product
+organisation's AI transition; managed and developed 6 PMs across levels to operate independently, defined the product
+hiring framework and built the broader PM organisation through hiring, mentorship and cross-functional leadership
+
+Learnifii, Gurgaon (Sep’19 - Dec’20)
+Founder & CEO (Impact: Increased revenue by ~₹40 L; Increased user-base by ~10K)
+• 0→1 founder: Built and scaled a consumer education marketplace/program business to 10K+ users, 250+ educators and
+~₹40 L revenue; selected for YC Interview W21
+• Business model & GTM: Started with a marketplace model and pivoted to curated programs to improve quality and
+standardisation; built a 10+ person team and drove acquisition through UGC loops, competitions, partnerships and paid
+channels with ~120% ROI on ~₹8 L paid acquisition
+• Product Strategy & Platform: Built and evolved a mobile-first platform integrating discovery, decision-making, transactions,
+lead generation, ratings & reviews, and content-sharing journeys; used customer research and retention/monetisation
+insights to continuously refine product strategy and experience
+
+VMock, Gurgaon (Mar’18 - Aug’19)
+Senior Product Manager (Impact: Increased revenue by ~₹40 Cr; Increased recruiter-base by 300%)
+• Global product strategy: Partnered directly with the CEO and senior leadership on product vision, portfolio strategy,
+positioning, pricing and GTM; launched multiple B2B2C product lines across 100+ countries, creating a ~₹40 Cr new
+revenue stream and increasing recruiter base ~300%, engagement ~400% and retention ~40%
+• Leadership & scale: Led a 20+ person cross-functional team across engineering, design, data science, QA and product
+analytics; translated strategy into multi-product roadmaps and scaled launches across a global
+university/employer/student ecosystem
+• Technical & platform depth: Led technical-architecture discussions and constructed product logic and algorithms across
+modules; defined datasets, validation requirements and testing throughout the product lifecycle, balancing product
+quality, scalability and delivery timelines
+
+Netomi, Gurgaon (May’17 - Mar’18)
+Product Manager (Impact: Increased bot engagement by ~30%)
+• AI platform strategy: Defined product strategy and roadmap for enterprise conversational-AI workflows across industries,
+functions and intents; experimentation and intent-flow redesign increased bot engagement ~30% and classification score
+~12.7%
+• Configurable platform & data systems: Designed reusable enterprise workflows and self-serve setup experiences; owned
+product logic, requirements and prioritisation with engineering/design, while managing training-data acquisition,
+classification and curation to improve model quality
+• Commercialisation: Partnered with Sales and Marketing on segmentation, pricing and GTM by industry and customer type,
+connecting platform capabilities to enterprise use cases and commercial outcomes
+
+Jarviz, Bangalore (Mar’16 - May’17)
+Product Manager (Impact: Increased acquisition by ~2x)
+• Mobile product: Owned 0→1 product strategy, MVP, launch and growth for a consumer job-search product across web
+and mobile; led 15+ engineers/designers and used analytics and experimentation to drive ~2x sign-ups, ~4x
+engagement and ~1.5x retention
+
+Wipro, Bangalore (Jul’13 - May’14)
+Project Engineer
+• Engineering & applied AI: Built robotics/computer-vision prototypes using machine learning, image processing, Kinect/RFID
+and sensor systems; launched two products and represented Wipro at EXCON 2013
+
+Education
+2014 - 2015 London Business School, London, United Kingdom
+Masters in Management, Strategy & Entrepreneurship
+2012 Hanyang University, Seoul, South Korea
+Summer Research Program
+Co-authored technical Paper entitled “Multi-person tracking-by-detection using deformable part
+models and Kalman Filtering” accepted in International SOC Design Conference
+2009 - 2013 Indian Institute of Technology, Guwahati, India
+Bachelor of Technology, Electronics & Communications Engineering
+Ranked among top 0.57% out of 400,000 candidates in nationwide IIT Joint Entrance Exam
+
+Additional
+• Mentorship: Top 1% mentor on Upraised/Topmate. Writing: Product management, business and technology content via
+personal blog and YouTube
